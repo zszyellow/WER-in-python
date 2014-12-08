@@ -5,6 +5,11 @@ import sys
 import numpy
 
 def wer(r, h):
+    """
+    This is a function that calculate the word error rate in ASR.
+    You can use it like this: wer("what is it".split(), "what is".split()) 
+    """
+    #build the matrix
     d = numpy.zeros((len(r)+1)*(len(h)+1), dtype=numpy.uint8).reshape((len(r)+1, len(h)+1))
     for i in range(len(r)+1):
         for j in range(len(h)+1):
@@ -22,6 +27,7 @@ def wer(r, h):
     result = float(d[len(r)][len(h)]) / len(r) * 100
     result = str("%.2f" % result) + "%"
 
+    #find out the manipulation steps
     x = len(r)
     y = len(h)
     list = []
@@ -47,6 +53,7 @@ def wer(r, h):
                 y = y
     list = list[::-1]
 
+    #print the result in aligned way
     print "REF:",
     for i in range(len(list)):
         if list[i] == "i":
