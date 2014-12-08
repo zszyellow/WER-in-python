@@ -1,13 +1,10 @@
 #-*- coding: utf-8 -*-
 #!/usr/bin/env python
 
+import sys
 import numpy
 
 def wer(r, h):
-    """
-    This function is the main function of calculate the WER. It uses a popular module called numpy.
-    The type of r and h is list.
-    """
     d = numpy.zeros((len(r)+1)*(len(h)+1), dtype=numpy.uint8).reshape((len(r)+1, len(h)+1))
     for i in range(len(r)+1):
         for j in range(len(h)+1):
@@ -22,6 +19,8 @@ def wer(r, h):
                 insert = d[i][j-1] + 1
                 delete = d[i-1][j] + 1
                 d[i][j] = min(substitute, insert, delete)
+    result = float(d[len(r)][len(h)]) / len(r) * 100
+    result = str("%.2f" % result) + "%"
 
     x = len(r)
     y = len(h)
@@ -30,7 +29,7 @@ def wer(r, h):
         if x == 0 and y == 0: 
             break
         else:
-            if d[x][y] == d[x-1][y-1]: 
+            if d[x][y] == d[x-1][y-1] and r[x-1] == h[y-1]: 
                 list.append("e")
                 x = x-1
                 y = y-1
@@ -48,7 +47,114 @@ def wer(r, h):
                 y = y
     list = list[::-1]
 
-    print list
+    print "REF:",
+    for i in range(len(list)):
+        if list[i] == "i":
+            count = 0
+            for j in range(i):
+                if list[j] == "d":
+                    count += 1;
+            index = i - count
+            print " "*(len(h[index])),
+        elif list[i] == "s":
+            count1 = 0
+            for j in range(i):
+                if list[j] == "i":
+                    count1 += 1;
+            index1 = i - count1
+            count2 = 0
+            for j in range(i):
+                if list[j] == "d":
+                    count2 += 1;
+            index2 = i - count2
+            if len(r[index1])<len(h[index2]):
+                print r[index1]+" "*(len(h[index2])-len(r[index1])),
+            else:
+                print r[index1],
+        else:
+            count = 0
+            for j in range(i):
+                if list[j] == "i":
+                    count += 1;
+            index = i - count
+            print r[index],
+    print
+    print "HYP:",
+    for i in range(len(list)):
+        if list[i] == "d":
+            count = 0
+            for j in range(i):
+                if list[j] == "i":
+                    count += 1;
+            index = i - count
+            print " "*(len(r[index])),
+        elif list[i] == "s":
+            count1 = 0
+            for j in range(i):
+                if list[j] == "i":
+                    count1 += 1;
+            index1 = i - count1
+            count2 = 0
+            for j in range(i):
+                if list[j] == "d":
+                    count2 += 1;
+            index2 = i - count2
+            if len(r[index1])>len(h[index2]):
+                print h[index2]+" "*(len(r[index1])-len(h[index2])),
+            else:
+                print h[index2],
+        else:
+            count = 0
+            for j in range(i):
+                if list[j] == "d":
+                    count += 1;
+            index = i - count
+            print h[index],
+    print
+    print "EVA:",
+    for i in range(len(list)):
+        if list[i] == "d":
+            count = 0
+            for j in range(i):
+                if list[j] == "i":
+                    count += 1;
+            index = i - count
+            print "D"+" "*(len(r[index])-1),
+        elif list[i] == "i":
+            count = 0
+            for j in range(i):
+                if list[j] == "d":
+                    count += 1;
+            index = i - count
+            print "I"+" "*(len(h[index])-1),
+        elif list[i] == "s":
+            count1 = 0
+            for j in range(i):
+                if list[j] == "i":
+                    count1 += 1;
+            index1 = i - count1
+            count2 = 0
+            for j in range(i):
+                if list[j] == "d":
+                    count2 += 1;
+            index2 = i - count2
+            if len(r[index1])>len(h[index2]):
+                print "S"+" "*(len(r[index1])-1),
+            else:
+                print "S"+" "*(len(h[index2])-1),
+        else:
+            count = 0
+            for j in range(i):
+                if list[j] == "i":
+                    count += 1;
+            index = i - count
+            print " "*(len(r[index])),
+    print
+    print "WER: "+result    
 
 if __name__ == '__main__':
-    wer("who is there".split(), "is there".split())      
+    filename1 = sys.argv[1]
+    filename2 = sys.argv[2]
+    r = file(filename1).read().split()
+    h = file(filename2).read().split()
+    wer(r, h)   
