@@ -35,15 +35,15 @@ def wer(r, h):
         if x == 0 and y == 0: 
             break
         else:
-            if d[x][y] == d[x-1][y-1] and r[x-1] == h[y-1]: 
+            if d[x][y] == d[x-1][y-1] and r[x-1] == h[y-1] and x-1>=0 and y-1>=0: 
                 list.append("e")
                 x = x-1
                 y = y-1
-            elif d[x][y] == d[x][y-1]+1:
+            elif d[x][y] == d[x][y-1]+1 and y-1>=0:
                 list.append("i")
                 x = x
                 y = y-1
-            elif d[x][y] == d[x-1][y-1]+1:
+            elif d[x][y] == d[x-1][y-1]+1 and x-1>=0 and y-1>=0:
                 list.append("s")
                 x = x-1
                 y = y-1
@@ -52,7 +52,6 @@ def wer(r, h):
                 x = x-1
                 y = y
     list = list[::-1]
-
     #print the result in aligned way
     print "REF:",
     for i in range(len(list)):
