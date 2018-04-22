@@ -6,7 +6,8 @@ import numpy
 
 def editDistance(r, h):
     '''
-    This function is to calculate the edit distance of refernce sentence and the hypothesis sentence.
+    This function is to calculate the edit distance of reference sentence and the hypothesis sentence.
+
     Main algorithm used is dynamic programming.
 
     Attributes: 
