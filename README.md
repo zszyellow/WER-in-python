@@ -1,10 +1,10 @@
 #WER calculation in python
 
-This file is written in python2.  
+This file is written in python3.7 
 
-- Module needed:   
+- Module Needed:   
     - numpy  
 - Usage:  
 python wer.py reference.txt hypothesis.txt  
-- Example:
+- Example:  
 ![result](result.jpg)
